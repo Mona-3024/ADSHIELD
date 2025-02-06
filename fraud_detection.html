@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraud detection</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: radial-gradient(circle, rgb(71, 89, 207), rgb(6, 15, 77), rgba(0, 0, 0, 0.90));
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        .dashboard {
+            background: linear-gradient(30deg, rgb(6, 15, 77), rgba(0, 0, 0, 0.9));
+            width: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+        }
+
+        .dashboard-title {
+            color: white;
+            padding: 5px;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+
+        .horizontal-line {
+            width: 75%;
+            height: 1px;
+            background-color: rgba(255, 255, 255, 0.65);
+            margin: 10px 0;
+        }
+
+        .dashboard-menu {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .dashboard-menu li {
+            margin-bottom: 25px;
+            padding: 5px;
+        }
+
+        .dashboard-menu li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .dashboard-menu li i {
+            margin-right: 12px;
+        }
+
+        .dashboard-menu li:hover {
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, whitesmoke 50%, rgba(255, 255, 255, 0) 100%);
+            background-size: 100% 2px;
+            background-repeat: no-repeat;
+            background-position: bottom;
+        }
+
+        .dashboard-menu li.active {
+            border-bottom: 3px solid transparent;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, whitesmoke 50%, rgba(255, 255, 255, 0) 100%);
+            background-size: 100% 2px;
+            background-repeat: no-repeat;
+            background-position: bottom;
+        }
+
+        /* SEARCH BAR */
+        .search-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-box {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.9);
+    border-radius: 30px;
+    padding: 10px;
+    box-shadow: 0 0 15px rgba(0, 183, 255, 1);
+    border: 2px solid rgba(0, 183, 255, 1);
+    position: relative;
+}
+
+.search-box input {
+    flex: 1;
+    border: none;
+    background: none;
+    color: white;
+    font-size: 18px;
+    padding: 12px 15px;
+    outline: none;
+}
+
+.search-box input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.search-box button {
+    background: rgba(0, 183, 255, 1);
+    border: none;
+    padding: 12px 15px;
+    border-radius: 30px;
+    cursor: pointer;
+    color: white;
+    font-size: 18px;
+    transition: 0.3s ease;
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    box-shadow: 0 0 12px rgba(0, 183, 255, 0.8);
+}
+
+.search-box button:hover {
+    background: rgba(0, 255, 255, 1);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 1);
+}
+
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <div class="dashboard">
+            <h1 class="dashboard-title">AdShield</h1>
+            <div class="horizontal-line"></div>
+            <nav>
+                <ul class="dashboard-menu">
+                    <li><a href="index.html"><i class="fa fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li class="active"><a href="#"><i class="fa fa-shield-alt"></i> Fraud Detection</a></li>
+                    <li><a href="analysis.html"><i class="fa fa-chart-line"></i> Ad Analytics</a></li>
+                    <li><a href="report.html"><i class="fa fa-file-alt"></i> Reports</a></li>
+                    <li><a href="notifications.html"><i class="fa fa-bell"></i> Notification</a></li>
+                    <li><a href="export.html"><i class="fa fa-download"></i> Export</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-container">
+            <div class="search-box">
+                <form id="search-form" method="POST" action="javascript:void(0)">
+                    <input type="text" id="search-query" name="query" placeholder="Search ads..." />
+                    <button type="submit"><i class="fa fa-search"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById("search-form").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            // Get the link from the search input
+            const query = document.getElementById("search-query").value;
+
+            // Update the start_urls and allowed_domains based on the input link
+            if (query) {
+                const domain = new URL(query).hostname;
+                const startUrl = query;
+
+                // Now you can update the start_urls and allowed_domains in your spider
+                updateSpiderConfig(domain, startUrl);
+            }
+        });
+
+        function updateSpiderConfig(domain, startUrl) {
+            // Perform the necessary logic to modify your AdSpider's allowed_domains and start_urls dynamically
+            // You can call an API, update a config file, or use a different method based on your setup
+            console.log("Updated Spider Config:");
+            console.log("Allowed Domains:", domain);
+            console.log("Start URLs:", startUrl);
+
+            // Optionally, you can trigger a scrape here or store the data to be used later
+        }
+    </script>
+</body>
+
+</html>

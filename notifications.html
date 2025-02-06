@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+         body {
+            background: radial-gradient(circle, rgb(71, 89, 207), rgb(6, 15, 77), rgba(0, 0, 0, 0.90));
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+        }
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        .dashboard {
+            background: linear-gradient(30deg, rgb(6, 15, 77), rgba(0, 0, 0, 0.9));
+            width: 200px; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+        }
+
+        .dashboard-title {
+            color: white;
+            padding: 5px;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+
+        .horizontal-line {
+            width: 75%;
+            height: 1px;
+            background-color: rgba(255, 255, 255, 0.65);
+            margin: 10px 0;
+        }
+
+        .dashboard-menu {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .dashboard-menu li {
+            margin-bottom: 25px;
+            padding: 5px;
+        }
+
+        .dashboard-menu li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .dashboard-menu li i {
+            margin-right: 12px;
+        }
+
+        .dashboard-menu li:hover {
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, whitesmoke 50%, rgba(255, 255, 255, 0) 100%);
+            background-size: 100% 2px;
+            background-repeat: no-repeat;
+            background-position: bottom;
+        }
+        .dashboard-menu li.active {
+            border-bottom: 3px solid transparent;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, whitesmoke 50%, rgba(255, 255, 255, 0) 100%);
+            background-size: 100% 2px;
+            background-repeat: no-repeat;
+            background-position: bottom;
+        }
+
+        /* Notification Section */
+        .notification-container {
+            margin-left: 220px;
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        .notification-box {
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 5px solid;
+            padding: 10px;
+            margin: 10px auto;
+            width: 60%;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+        }
+
+        .notification-box span {
+            font-size: 1rem;
+        }
+        .warning { border-color: yellow; }
+        .danger { border-color: red; }
+        .info { border-color: lightblue; }
+        i { font-size: 18px; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="dashboard">
+            <h1 class="dashboard-title">AdShield</h1>
+            <div class="horizontal-line"></div>
+            <nav>
+                <ul class="dashboard-menu">
+                    <li><a href="index.html"><i class="fa fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="fraud_detection.html"><i class="fa fa-shield-alt"></i> Fraud Detection</a></li>
+                    <li><a href="analysis.html"><i class="fa fa-chart-line"></i> Ad Analytics</a></li>
+                    <li><a href="report.html"><i class="fa fa-file-alt"></i> Reports</a></li>
+                    <li class="active"><a href="#"><i class="fa fa-bell"></i> Notification</a></li>
+                    <li><a href="export.html"><i class="fa fa-download"></i> Export</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Notification Section -->
+        <div class="notification-container">
+            <h2>Ad Fraud Detection Alerts</h2>
+            <div id="notifications">
+                <!-- Notifications will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const notifications = [
+    { message: "⚠ Suspicious activity detected on Facebook Ads!", type: "warning" },
+    { message: "🚨 High bot traffic detected from IP 192.168.1.100!", type: "danger" },
+    { message: "🔍 Click fraud detected on your latest campaign!", type: "info" },
+    { message: "🛑 Unusual ad clicks from the same user in 5 minutes!", type: "warning" },
+    { message: "📉 Ad impressions dropped suddenly. Possible ad blocker activity.", type: "info" },
+    { message: "🚨 Large number of invalid clicks detected from multiple IPs!", type: "danger" },
+    { message: "⚠ High bounce rate from new visitors. Possible bot traffic.", type: "warning" },
+    { message: "🔍 AI detected a sudden spike in fake leads!", type: "info" },
+    { message: "🚨 Multiple fraudulent clicks from a single device identified!", type: "danger" },
+    { message: "⚠ An unusual geographic region is generating fake traffic!", type: "warning" },
+    { message: "🔍 Possible bot attack detected on landing page.", type: "info" },
+    { message: "🚨 Unauthorized access attempt detected from unknown IP!", type: "danger" },
+    { message: "⚠ Your ad received an abnormally high number of clicks in 10 minutes.", type: "warning" },
+    { message: "📉 CPC has increased suddenly. Potential bidding fraud detected.", type: "info" },
+    { message: "🚨 Large-scale ad click operation detected from multiple accounts!", type: "danger" },
+    { message: "🛑 Suspicious new user registrations linked to ad traffic.", type: "warning" },
+    { message: "🔍 High invalid traffic detected from referral sources.", type: "info" },
+    { message: "⚠ Multiple failed login attempts detected on your account.", type: "warning" },
+    { message: "🚨 Ad spend has increased rapidly in the last hour. Possible fraud!", type: "danger" },
+    { message: "📉 Your website is experiencing an abnormal increase in bounce rate.", type: "info" },
+    { message: "🔍 Traffic quality score has dropped. Possible bot infiltration.", type: "info" },
+    { message: "🚨 Click farm detected! Traffic originating from flagged IPs.", type: "danger" },
+    { message: "⚠ Your ad campaign is being targeted by suspicious accounts!", type: "warning" },
+    { message: "🛑 Unusual keyword searches leading to invalid clicks detected.", type: "warning" },
+    { message: "📉 Conversion rates have dropped suddenly. Fraud suspected.", type: "info" },
+    { message: "🚨 Fake signups from the same device detected in your campaign!", type: "danger" }
+];
+
+
+        function shuffleArray(array) {
+            return array.sort(() => Math.random() - 0.5);
+        }
+
+        function loadNotifications() {
+    const container = document.getElementById("notifications");
+    container.innerHTML = ""; 
+
+    let shuffledNotifications = shuffleArray([...notifications]);
+    let numToShow = Math.floor(Math.random() * 5) + 4; // Random number between 4 and 8
+
+    shuffledNotifications.slice(0, numToShow).forEach((notification) => {
+        const div = document.createElement("div");
+        div.classList.add("notification-box", notification.type);
+
+        let iconClass = "fa-exclamation-triangle"; 
+        if (notification.type === "danger") iconClass = "fa-skull-crossbones";
+        if (notification.type === "info") iconClass = "fa-info-circle";
+
+        div.innerHTML = `<i class="fas ${iconClass}"></i> <span>${notification.message}</span>`;
+        container.appendChild(div);
+    });
+}
+
+// Helper function to shuffle an array
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+// Load notifications on page load
+window.onload = loadNotifications;
+    </script>
+
+</body>
+</html>

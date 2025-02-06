@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: radial-gradient(circle, rgb(71, 89, 207), rgb(6, 15, 77), rgba(0, 0, 0, 0.90));
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+    }
+
+    .dashboard-container {
+      display: flex;
+      min-height: 100vh;
+      width: 100%;
+    }
+
+    .dashboard {
+      background: linear-gradient(30deg, rgb(6, 15, 77), rgba(0, 0, 0, 0.9));
+      width: 200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+    }
+
+    .dashboard-title {
+      color: white;
+      padding: 5px;
+      text-align: center;
+      font-size: 1.5rem;
+    }
+
+    .horizontal-line {
+      width: 75%;
+      height: 1px;
+      background-color: rgba(255, 255, 255, 0.65);
+      margin: 10px 0;
+    }
+
+    .dashboard-menu {
+      list-style-type: none;
+      padding: 0;
+
+    }
+
+    .dashboard-menu li {
+      margin-bottom: 25px;
+      padding: 5px;
+
+    }
+
+    .dashboard-menu li a {
+      color: white;
+      text-decoration: none;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+
+    }
+
+    .dashboard-menu li i {
+      margin-right: 12px;
+    }
+
+    .dashboard-menu li:hover {
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, whitesmoke 50%, rgba(255, 255, 255, 0) 100%);
+      background-size: 100% 2px;
+      background-repeat: no-repeat;
+      background-position: bottom;
+    }
+
+    .dashboard-menu li.active {
+      border-bottom: 3px solid transparent;
+      background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, whitesmoke 50%, rgba(255, 255, 255, 0) 100%);
+      background-size: 100% 2px;
+      background-repeat: no-repeat;
+      background-position: bottom;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 30px;
+      border-radius: 10px;
+      /* Rounded corners for the entire table */
+      overflow: hidden;
+      /* Ensures the rounded corners are applied to the content */
+    }
+
+    table,
+    th,
+    td {
+      border: 1px solid white;
+
+    }
+
+    th,
+    td {
+      padding: 12px 18px;
+      text-align: center;
+      background: rgba(142, 186, 253, 0.692);
+      color: black;
+      font-size: 0.98em;
+    }
+
+    th {
+      background: linear-gradient(0deg, rgba(0, 0, 0, 0.281), rgb(42, 109, 253), rgba(0, 0, 0, 0.281));
+      font-size: 1.1em;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: bold;
+    }
+
+    td {
+      font-size: 0.98em;
+      font-weight: 510;
+    }
+
+    tr:hover {
+      background-color: #3B4A72;
+      /* Light blue hover effect */
+    }
+
+    th {
+      font-weight: bold;
+      color: white;
+    }
+
+    table caption {
+      font-size: 1.5em;
+      margin: 10px 0;
+      color: white;
+      text-align: center;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="dashboard">
+    <h1 class="dashboard-title">AdShield</h1>
+    <div class="horizontal-line"></div>
+    <nav>
+      <ul class="dashboard-menu">
+        <li><a href="index.html"><i class="fa fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="#"><i class="fa fa-shield-alt"></i> Fraud Detection</a></li>
+        <li><a href="analysis.html"><i class="fa fa-chart-line"></i> Ad Analytics</a></li>
+        <li class="active"><a href="#"><i class="fa fa-file-alt"></i> Reports</a></li>
+        <li><a href="notifications.html"><i class="fa fa-bell"></i> Notification</a></li>
+        <li><a href="export.html"><i class="fa fa-download"></i> Export</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div style="padding:30px; margin-left:220px;">
+    <table border="1" style="width:100%; text-align:center;">
+      <thead>
+        <tr>
+          <th>Image URL</th>
+          <th>Extracted Text</th>
+          <th>Scam Analysis</th>
+        </tr>
+      </thead>
+      <tbody id="report-table-body">
+        <!-- Data rows will be inserted here by JavaScript -->
+      </tbody>
+    </table>
+  </div>
+</body>
+
+</html>
+<script>
+  // Fetch data from scam_report.json and dynamically populate the table
+  document.addEventListener('DOMContentLoaded', () => {
+    fetch('scam_report.json')
+      .then(response => response.json())
+      .then(data => {
+        const tableBody = document.getElementById('report-table-body');
+        data.forEach(row => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+              <td>${row.image_url}</td>
+              <td>${row.extracted_text}</td>
+              <td>${row["Scam Analysis"]}</td>
+            `;
+          tableBody.appendChild(tr);
+        });
+      })
+      .catch(error => console.error('Error fetching the report:', error));
+  });
+</script>
